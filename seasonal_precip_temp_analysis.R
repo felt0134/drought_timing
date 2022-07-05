@@ -77,7 +77,7 @@ rm(spring_summer_ppt)
 #VPD -------
 
 #repetitive code among the two seasons. Could be turned into a function. Only
-#ru thisn once.
+#run this once.
 
 #Run this once
 
