@@ -16,6 +16,9 @@ year_list <-
 
 #import data
 ppt_gpp <- readr::read_csv(paste0('Data/GPP/Ecoregion/',Ecoregion,'/ppt_gpp_combined.csv'))
+test <- readRDS('test_save')
+head(test)
+saveRDS(ppt_gpp,'test_save')
 
 #create a vector of unique sites IDs
 id_list <- unique(ppt_gpp$id_value)

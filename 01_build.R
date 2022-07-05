@@ -19,3 +19,5 @@ setwd(dirname(current_path))
 #load functions
 source('02_Functions.R')
 
+#have to streamline this analysis to the main ones of gpp and precip, save ppt-gpp as .rds zip files
+#and 
