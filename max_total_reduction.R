@@ -12,7 +12,7 @@ year_list <-
   as.character(year_list) #easier when they are characters
 
 #import data
-ppt_gpp <- readr::read_csv(paste0('Data/GPP/Ecoregion/',Ecoregion,'/ppt_gpp_combined.csv'))
+ppt_gpp <- readRDS(paste0('ppt_gpp_',Ecoregion))
 
 id_list <- unique(ppt_gpp$id_value)
 

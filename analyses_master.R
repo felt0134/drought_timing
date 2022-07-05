@@ -12,7 +12,6 @@ library(progressr)
 
 #Ecoregion = 'shortgrass_steppe'
 Ecoregion = 'northern_mixed_prairies' 
-#Ecoregion = 'nebraska_sandhills'
 
 # day at which 25%, 50%, and 75% of growth has occurred during average and drought years -----
 
