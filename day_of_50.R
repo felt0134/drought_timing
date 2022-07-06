@@ -16,7 +16,6 @@ year_list <-
   as.character(year_list) #easier when they are characters
 
 #import data
-#import data
 ppt_gpp <- readRDS(paste0('ppt_gpp_',Ecoregion))
 
 #create a vector of unique sites IDs
@@ -104,8 +103,11 @@ rm(day_50_diff)
 
 #save to file as raster 
 filename <-
-  paste0(paste0('Data/GPP/Ecoregion/',Ecoregion,'/day_50_drought_impact_',Ecoregion,'.tif'))
-writeRaster(day_25_diff_2, filename,overwrite=TRUE)
+  paste0(paste0('Output/day_50_drought_impact_',Ecoregion,'.tif'))
+writeRaster(day_50_diff_2, filename,overwrite=TRUE)
+
+#cleanup
+rm(gpp_50,gpp_50_drought,gpp_50_drought_3)
 
 # end ------
 

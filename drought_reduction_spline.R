@@ -72,13 +72,13 @@ for(i in doy_list){
   gpp_predicted_list_average_df <- list_to_df(gpp_predicted_list_average)
   colnames(gpp_predicted_list_average_df) <- c('doy','gpp_average','id_val')
   gpp_predicted_list_average_df <- gpp_predicted_list_average_df %>%
-    filter(gpp_average > 0) 
+    dplyr::filter(gpp_average > 0) 
   
   #drought
   gpp_predicted_list_drought_df <- list_to_df(gpp_predicted_list_drought)
   colnames(gpp_predicted_list_drought_df) <- c('doy','gpp_drought','id_val')
   gpp_predicted_list_drought_df <- gpp_predicted_list_drought_df %>%
-    filter(gpp_drought > 0)
+    dplyr::filter(gpp_drought > 0)
   
   hist(gpp_predicted_list_drought_df$gpp_drought,main = i)
 
@@ -119,14 +119,15 @@ for(i in doy_list){
 
 gpp_reduction_list_df <- list_to_df(gpp_reduction_list)
 
-filename <- paste0('Data/GPP/Ecoregion/',Ecoregion,'/drought_gpp_reduction_',Ecoregion,'.csv')
+filename <- paste0('Output/drought_gpp_reduction_',Ecoregion,'.csv')
 write.csv(gpp_reduction_list_df,filename)
 
 gpp_reduction_list_df_2 <- list_to_df(gpp_reduction_list_2)
 
-filename <- paste0('Data/GPP/Ecoregion/',Ecoregion,'/drought_gpp_reduction_absolute_',Ecoregion,'.csv')
+filename <- paste0('Output/drought_gpp_reduction_absolute_',Ecoregion,'.csv')
 write.csv(gpp_reduction_list_df_2,filename)
 
+#cleanup
 rm(gpp_predicted_average,gpp_predicted_drought,gpp_predicted_drought_average,
    gpp_predicted_drought_average_2,gpp_predicted_list_average,gpp_predicted_list_average_df,
    gpp_predicted_list_drought,gpp_predicted_list_drought_df,gpp_reduction_list,

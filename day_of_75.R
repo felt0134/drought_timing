@@ -1,6 +1,7 @@
+
 # this scrips estimates the day by which ~75% of total productivity
 # has been reached between day of year 57 and 297 and also explores
-# how that changes during years of low precipitation
+# how that changes during drought
 
 #setup----
 plan(multisession, workers = 10)
@@ -102,8 +103,11 @@ rm(day_75_diff)
 
 #save to file as raster 
 filename <-
-  paste0(paste0('Data/GPP/Ecoregion/',Ecoregion,'/day_75_drought_impact_',Ecoregion,'.tif'))
-writeRaster(day_25_diff_2, filename,overwrite=TRUE)
+  paste0(paste0('Output/day_75_drought_impact_',Ecoregion,'.tif'))
+writeRaster(day_75_diff_2, filename,overwrite=TRUE)
+
+#cleanup
+rm(gpp_75,gpp_75_drought,gpp_75_drought_3)
 
 #done ------
 

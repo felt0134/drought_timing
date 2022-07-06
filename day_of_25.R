@@ -102,8 +102,11 @@ rm(day_25_diff)
 
 #save to file as raster 
 filename <-
-  paste0(paste0('Data/GPP/Ecoregion/',Ecoregion,'/day_25_drought_impact_',Ecoregion,'.tif'))
+  paste0(paste0('Output/day_25_drought_impact_',Ecoregion,'.tif'))
 writeRaster(day_25_diff_2, filename,overwrite=TRUE)
+
+#cleanup
+rm(gpp_25,gpp_25_drought,gpp_25_drought_3)
 
 #done ------
 

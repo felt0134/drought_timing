@@ -1,9 +1,6 @@
 
 #get splines of growth curves 
 
-#library(plotrix)
-
-#Ecoregion = 'shortgrass_steppe'
 
 # setup----
 plan(multisession, workers = 10)
@@ -107,7 +104,7 @@ with_progress({
   })
 })
 
-# for each day, get a prediction from each spline, then calculate the 95%CI (mean +/- 2*SE)
+# for each day, get a prediction from each spline, then calculate the IQR
 gpp_predicted_list_2 <- list()
 gpp_mean_list_2 <- list()
 
@@ -136,9 +133,10 @@ gpp_mean_list_df_2 <- list_to_df(gpp_mean_list_2)
 head(gpp_mean_list_df_2,1)
 
 
-filename <- paste0('Data/GPP/Ecoregion/',Ecoregion,'/drought_growth_curve_',Ecoregion,'.csv')
+filename <- paste0('Output/drought_growth_curve_',Ecoregion,'.csv')
 write.csv(gpp_mean_list_df_2,filename)
 
+#cleanup
 rm(gpp_df_mean,gpp_mean_list,gpp_mean_list_df_2,gpp_predicted,gpp_predicted_list,
    gpp_predicted_list_df,gpp_predicted_list_mean,growth_curve_spline_list)
 
