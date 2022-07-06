@@ -29,5 +29,8 @@ with_progress({
 max_total_reduction_df <- list_to_df(max_total_reduction_list)
 rm(max_total_reduction_list)
 
-filename <- paste0('Output/max_total_reduction_',Ecoregion,'.csv')
-write.csv(max_total_reduction_df, filename)
+filename <- paste0('Output/max_total_reduction_',Ecoregion,'.rds')
+saveRDS(max_total_reduction_df, filename)
+
+#cleanup
+rm(ppt_gpp,max_total_reduction_df)

@@ -119,13 +119,13 @@ for(i in doy_list){
 
 gpp_reduction_list_df <- list_to_df(gpp_reduction_list)
 
-filename <- paste0('Output/drought_gpp_reduction_',Ecoregion,'.csv')
-write.csv(gpp_reduction_list_df,filename)
+filename <- paste0('Output/drought_gpp_reduction_',Ecoregion,'.rds')
+saveRDS(gpp_reduction_list_df,filename)
 
 gpp_reduction_list_df_2 <- list_to_df(gpp_reduction_list_2)
 
-filename <- paste0('Output/drought_gpp_reduction_absolute_',Ecoregion,'.csv')
-write.csv(gpp_reduction_list_df_2,filename)
+filename <- paste0('Output/drought_gpp_reduction_absolute_',Ecoregion,'rds')
+saveRDS(gpp_reduction_list_df_2,filename)
 
 #cleanup
 rm(gpp_predicted_average,gpp_predicted_drought,gpp_predicted_drought_average,

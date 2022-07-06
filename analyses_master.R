@@ -7,8 +7,8 @@
 library(future.apply)
 library(progressr)
 
-#pick which ecoregion to runthe script for. You could loop and run each ecoregion
-#in one batch but some of these take a while and it may be nice to the output for each.
+#pick which ecoregion to run the script for. You could loop and run each ecoregion
+#in one batch but some of these take a while.
 
 Ecoregion = 'shortgrass_steppe'
 #Ecoregion = 'northern_mixed_prairies' 
@@ -38,4 +38,4 @@ source('drought_reduction_spline.R')
 source('max_total_reduction.R')
 
 
-
+#-------------------------------------------------------------------------------

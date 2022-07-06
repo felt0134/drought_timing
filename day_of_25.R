@@ -106,7 +106,7 @@ filename <-
 writeRaster(day_25_diff_2, filename,overwrite=TRUE)
 
 #cleanup
-rm(gpp_25,gpp_25_drought,gpp_25_drought_3)
+rm(gpp_25,gpp_50_drought,gpp_25_drought_3,day_25_diff_2,ppt_gp)
 
 #done ------
 
