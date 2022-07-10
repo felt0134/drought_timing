@@ -90,7 +90,7 @@ head(gpp_mean_list_df,1)
 filename <- paste0('Output/average_growth_curve_',Ecoregion,'.rds')
 saveRDS(gpp_mean_list_df,filename)
 
-rm(gpp_df_mean,gpp_mean_list,gpp_mean_list_df,gpp_predicted,gpp_predicted_list,
+rm(gpp_mean_list,gpp_mean_list_df,gpp_predicted,gpp_predicted_list,
    gpp_predicted_list_df,gpp_predicted_list_mean,growth_curve_spline_list)
 
 
@@ -137,8 +137,11 @@ filename <- paste0('Output/drought_growth_curve_',Ecoregion,'.rds')
 saveRDS(gpp_mean_list_df_2,filename)
 
 #cleanup
-rm(gpp_df_mean,gpp_mean_list,gpp_mean_list_df_2,gpp_predicted,gpp_predicted_list,
-   gpp_predicted_list_df,gpp_predicted_list_mean,growth_curve_spline_list)
+rm(gpp_mean_list_df_2,gpp_predicted,
+   gpp_predicted_list_df,gpp_predicted_list_mean,gpp_mean_list_2,gpp_predicted_ci_25,
+   gpp_predicted_ci_75,gpp_predicted_list_2,gpp_predicted_list_2_df,
+   gpp_predicted_list_2_mean,gpp_predicted_list_3,gpp_predicted_list_3_df,
+   gpp_predicted_list_3_mean,growth_curve_drought_spline_list,ppt_gpp)
 
 
 # end -------

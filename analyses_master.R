@@ -10,8 +10,8 @@ library(progressr)
 #pick which ecoregion to run the script for. You could loop and run each ecoregion
 #in one batch but some of these take a while.
 
-Ecoregion = 'shortgrass_steppe'
-#Ecoregion = 'northern_mixed_prairies' 
+#Ecoregion = 'shortgrass_steppe'
+Ecoregion = 'northern_mixed_prairies' 
 
 # day by which 25%, 50%, and 75% of growth has occurred during average and drought years -----
 

@@ -124,15 +124,17 @@ saveRDS(gpp_reduction_list_df,filename)
 
 gpp_reduction_list_df_2 <- list_to_df(gpp_reduction_list_2)
 
-filename <- paste0('Output/drought_gpp_reduction_absolute_',Ecoregion,'rds')
+filename <- paste0('Output/drought_gpp_reduction_absolute_',Ecoregion,'.rds')
 saveRDS(gpp_reduction_list_df_2,filename)
 
 #cleanup
 rm(gpp_predicted_average,gpp_predicted_drought,gpp_predicted_drought_average,
-   gpp_predicted_drought_average_2,gpp_predicted_list_average,gpp_predicted_list_average_df,
-   gpp_predicted_list_drought,gpp_predicted_list_drought_df,gpp_reduction_list,
-   growth_drought_spline_list,growth_spline_list,gpp_reduction_list_2,gpp_predicted_drought_average_3,
-   gpp_predicted_drought_average_4)
+   gpp_predicted_drought_average_2,gpp_predicted_drought_average_3,
+   gpp_predicted_drought_average_4,gpp_predicted_list_average,
+   gpp_predicted_list_average_df,gpp_predicted_list_drought,
+   gpp_predicted_list_drought_df,gpp_reduction_list,gpp_reduction_list_2,
+   gpp_reduction_list_df,gpp_reduction_list_df_2,growth_spline_list,
+   growth_drought_spline_list,growth_drought_spline_list,ppt_gpp)
 
 
 # end------
