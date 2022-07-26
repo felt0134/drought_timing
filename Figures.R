@@ -25,12 +25,7 @@ states_all_sites <- sp::spTransform(states_all_sites,
 #prep for ggplot
 #https://stackoverflow.com/questions/62435609/plot-shapefile-with-ggplot2
 
-states_all_sites_df <- fortify(states_all_sites)
 states_all_sites_tidy <- tidy(states_all_sites)
-
-# Recategorizes data as required for plotting
-states_all_sites$id <- row.names(states_all_sites)
-states_all_sites_tidy <- left_join(states_all_sites_tidy, states_all_sites@data)
 
 #-------------------------------------------------------------------------------
 # day of 75% carbon uptake in normal and dry years  -----
@@ -67,7 +62,7 @@ day_75_sgs_nmp_drought_map <-
                color = "black", size = 0.1,fill=NA) +
   geom_raster(data=day_75_drought_df, mapping=aes(x = x, y = y, fill = layer)) + 
   coord_equal() +
-  scale_fill_scico('Effect of drought by day at which\n75% of total C uptake occurs (days)',
+  scale_fill_scico('Effect of drought on day by which\n75% of total C uptake occurs (days)',
                    palette = 'roma',direction = -1,midpoint = 0) +
   xlab('') +
   ylab('') +
@@ -549,7 +544,6 @@ rm(day_25_lat_plot,day_25_drought_nmp_sgs_2_df,day_25_drought_nmp_sgs_2_df)
 #-------------------------------------------------------------------------------
 # cumulative carbon uptake in average and dry years ------
 
-
 #import:
 
 #import SGS
@@ -645,9 +639,9 @@ dev.off()
           c(growth_drynamics_absolute_sgs$ci_75,rev(growth_drynamics_absolute_sgs$ci_25)),
           col = "black", border = F)
   text(100, -20, "Spring",cex=3)
-  text(200, -5, "Summer",cex=3)
+  text(201, -5, "Summer",cex=3)
   text(275, -20, "Fall",cex=3)
-  text(200, 1, "Median carbon uptake",cex=2)
+  text(201, 1, "Median carbon uptake",cex=2.5)
   abline(h=0,col='black',lty='dashed')
   mtext('Shortgrass steppe',side=3,line=0.5,cex=1.5)
   mtext('a',side=3,line=0.5,cex=2,adj=0.0)
@@ -664,7 +658,7 @@ dev.off()
   abline(h=0,col='black',lty='dashed')
   mtext('Northern mixed prairies',side=3,line=0.5,cex=1.5)
   mtext('Day of year',side=1,line=4.5,cex=2.5)
-  mtext(expression("Change in carbon uptake "(~g~C~m^-2~'16 days')),side=2,line=4,adj = -0.1, cex=2.5)
+  mtext(expression("Drought impact to carbon uptake "(g~C~m^-2~'16 days')),side=2,line=4,adj = -0.1, cex=2.25)
   mtext('b',side=3,line=0.5,cex=2,adj=0.0)
   lines(abs_change~doy,data=growth_drynamics_absolute_nmp,type='l',col='white',lwd=4)
   
@@ -855,8 +849,7 @@ rm(max_total_reduction_nmp_df,max_total_reduction_sgs_df,
 
 
 #-------------------------------------------------------------------------------
-# peak reduction in carbon uptake  (%)  ------
-
+# peak reduction in carbon uptake  UPDATE  ------
 
 #import:
 
@@ -1078,7 +1071,6 @@ rm(max_reduction,max_reduction_doy,max_reduction_doy_map,
 #-------------------------------------------------------------------------------
 # total reduction in carbon uptake (absolute) -------
 
-
 #import:
 
 #import sgs
@@ -1215,8 +1207,6 @@ max_total_reduction_sgs_df <-
 max_total_reduction_nmp_df <- 
   readRDS('Output/max_total_reduction_northern_mixed_prairies.rds')
 
-#format:
-
 #import and get total for sgs
 peak_abs_reduction_sgs <- max_total_reduction_sgs_df %>%
   dplyr::filter(type == 'max') %>%
@@ -1244,17 +1234,14 @@ peak_abs_reduction <-projectRaster(peak_abs_reduction, crs='+proj=aea +lat_1=29.
 +        +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs')
 peak_abs_reduction <- data.frame(rasterToPoints(peak_abs_reduction))
 
-
-#plot:
-
 peak_abs_reduction_map <-
   ggplot() +
   geom_polygon(data=states_all_sites_tidy, mapping=aes(x = long, y = lat,group=group),
                color = "black", size = 0.1,fill=NA) +
   geom_raster(data = peak_abs_reduction, mapping=aes(x = x, y = y, fill = layer)) + 
   coord_equal() +
-  scale_fill_scico(bquote('Maximum reduction in carbon uptake ('*'g C'~ m^-2~'16 days'*')'),
-                   palette = 'batlow',direction = 1) +
+  ggtitle('Peak absolute reduction in carbon uptake') +
+  scale_fill_scico(bquote(' '*'g C'~ m^-2~'16 days'*''),palette = 'batlow',direction = 1) +
   xlab('') +
   ylab('') +
   scale_x_continuous(expand=c(0,0)) +
@@ -1265,18 +1252,19 @@ peak_abs_reduction_map <-
     axis.text.y = element_blank(),
     axis.title.x = element_text(color='black',size=10),
     axis.title.y = element_text(color='black',size=10),
+    plot.title = element_text(size = 10, face = "bold"),
     axis.ticks = element_blank(),
     legend.key = element_blank(),
     legend.position = 'top',
     strip.background =element_rect(fill="white"),
     strip.text = element_text(size=10),
     panel.background = element_rect(fill=NA),
-    panel.border = element_blank(), 
+    panel.border = element_blank(), #make the borders clear in prep for just have two axes
     axis.line.x = element_blank(),
     axis.line.y = element_blank())
 
 
-#now do distributions
+#now do PDF 
 
 peak_abs_reduction_nmp <- data.frame(rasterToPoints(peak_abs_reduction_nmp))
 peak_abs_reduction_nmp$Ecoregion <- 'Northern mixed prairies'
@@ -1293,7 +1281,7 @@ peak_abs_reduction_pdf <- ggplot(peak_abs_reduction_rbind, aes(x = reduction, fi
     'Northern mixed prairies' = 'steelblue2',
     'Shortgrass steppe' = 'green4'
   )) +
-  xlab(bquote('Maximum reduction ('*'g C'~ m^-2~'16 days'*')')) +
+  xlab (bquote('Peak reduction ('*'g C'~ m^-2~'16 days'*')')) +
   ylab('Probability density') +
   theme(
     axis.text.x = element_text(color = 'black', size = 10),
@@ -1312,24 +1300,249 @@ peak_abs_reduction_pdf <- ggplot(peak_abs_reduction_rbind, aes(x = reduction, fi
     axis.line.y = element_line(colour = "black"))
 
 
-#try to make inset
-vp <- viewport(width = 0.44, height = 0.39, x = 0.23,y=0.27)
+#
+#
 
-#executing the inset, you create a function the utlizes all the previous code
-full <- function() {
-  print(peak_abs_reduction_map)
-  print(peak_abs_reduction_pdf , vp = vp)
-}
+#relative reductions
 
-#save
-png(height = 1700,width=2000,res=300,'Figures/peak_abs_reduction_map.png')
+#import and get total for sgs
+max_reduction_sgs <- max_total_reduction_sgs_df %>%
+  dplyr::filter(type == 'max') %>%
+  dplyr::filter(doy > 73) %>%
+  dplyr::filter(doy < 297) %>%
+  dplyr::select(x,y,perc_reduction)
 
-full()
+
+max_reduction_sgs <- rasterFromXYZ(max_reduction_sgs)
+crs(max_reduction_sgs) <- "+proj=longlat +datum=WGS84"
+
+#import and get total for nmp
+max_reduction_nmp <- max_total_reduction_nmp_df %>%
+  dplyr::filter(type == 'max') %>%
+  dplyr::filter(doy > 73) %>%
+  dplyr::filter(doy < 297) %>%
+  dplyr::select(x,y,perc_reduction)
+
+max_reduction_nmp <- rasterFromXYZ(max_reduction_nmp)
+crs(max_reduction_nmp) <- "+proj=longlat +datum=WGS84"
+
+#combine
+max_reduction <- merge(max_reduction_nmp,max_reduction_sgs,tolerance = 0.20)
+
+max_reduction <-projectRaster(max_reduction, crs='+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96
++        +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs')
+max_reduction <- data.frame(rasterToPoints(max_reduction))
+
+max_reduction_rel_map <-
+  ggplot() +
+  geom_polygon(data=states_all_sites_tidy, mapping=aes(x = long, y = lat,group=group),
+               color = "black", size = 0.1,fill=NA) +
+  geom_raster(data=max_reduction, mapping=aes(x = x, y = y, fill = layer)) + 
+  coord_equal() +
+  ggtitle('Peak relative reduction in carbon uptake') +
+  scale_fill_scico('%',
+                   palette = 'batlow',direction = 1) +
+  xlab('') +
+  ylab('') +
+  scale_x_continuous(expand=c(0,0)) +
+  scale_y_continuous(expand=c(0,0)) +
+  coord_fixed(xlim=c(-1500000,0), ylim=c(9e+05,3100000)) + #crop 
+  theme(
+    axis.text.x = element_blank(), #angle=25,hjust=1),
+    axis.text.y = element_blank(),
+    axis.title.x = element_text(color='black',size=10),
+    axis.title.y = element_text(color='black',size=10),
+    axis.ticks = element_blank(),
+    legend.key = element_blank(),
+    plot.title = element_text(size = 10, face = "bold"),
+    legend.position = 'top',
+    strip.background =element_rect(fill="white"),
+    strip.text = element_text(size=10),
+    panel.background = element_rect(fill=NA),
+    panel.border = element_blank(), #make the borders clear in prep for just have two axes
+    axis.line.x = element_blank(),
+    axis.line.y = element_blank())
+
+#now to PDFs
+max_reduction_sgs <- data.frame(rasterToPoints(max_reduction_sgs))
+max_reduction_sgs$ecoregion <- 'Shortgrass steppe'
+
+max_reduction_nmp <- data.frame(rasterToPoints(max_reduction_nmp))
+max_reduction_nmp$ecoregion <- 'Northern mixed prairies'
+
+max_reduction_rbind <- rbind(max_reduction_nmp,max_reduction_sgs)
+
+#peak reduction PDF
+max_reduction_rel_pdf <- ggplot(max_reduction_rbind, aes(x = perc_reduction, fill = ecoregion)) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_density(color = 'black', alpha = 0.5, aes(y = ..scaled..)) +
+  scale_fill_manual(values = c(
+    'Northern mixed prairies' = 'steelblue2',
+    'Shortgrass steppe' = 'green4'
+  )) +
+  xlab("Peak reduction (%)") +
+  ylab('Probability density') +
+  theme(
+    axis.text.x = element_text(color = 'black', size = 10),
+    axis.text.y = element_text(color = 'black', size = 10),
+    axis.title = element_text(color = 'black', size = 10),
+    axis.ticks = element_line(color = 'black'),
+    legend.key = element_blank(),
+    legend.title = element_blank(),
+    legend.text = element_text(size = 9),
+    legend.position = 'top',
+    strip.background = element_rect(fill = "white"),
+    strip.text = element_text(size = 10),
+    panel.background = element_rect(fill = NA),
+    panel.border = element_blank(),
+    axis.line.x = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black"))
+
+library(patchwork)
+
+png(height = 3000,width=2500,res=300,'Figures/rel_abs_max_reduction.png')
+
+p123 <- peak_abs_reduction_map + max_reduction_rel_map +  
+  peak_abs_reduction_pdf + max_reduction_rel_pdf +  plot_layout(ncol = 2)
+p123 + plot_annotation(tag_levels = "a")
 
 dev.off()
 
 #cleanup
 rm(max_total_reduction_nmp_df,max_total_reduction_sgs_df,
    peak_abs_reduction_map,peak_abs_reduction_nmp,peak_abs_reduction_sgs,
-   peak_abs_reduction_rbind,peak_abs_reduction_pdf,vp,peak_abs_reduction)
+   peak_abs_reduction_rbind,peak_abs_reduction_pdf,peak_abs_reduction,max_reduction,
+   max_reduction_nmp,max_reduction_rbind,max_reduction_rel_map,max_reduction_rel_pdf,
+   max_reduction_sgs,p123)
+
+
+#-------------------------------------------------------------------------------
+# day of peak reduction map -------
+
+#import:
+
+#import sgs
+max_total_reduction_sgs_df <- 
+  readRDS('Output/max_total_reduction_shortgrass_steppe.rds')
+
+#import nmp
+max_total_reduction_nmp_df <- 
+  readRDS('Output/max_total_reduction_northern_mixed_prairies.rds')
+
+
+#import and get total for sgs
+max_reduction_doy_sgs <- max_total_reduction_sgs_df %>%
+  dplyr::filter(type == 'max') %>%
+  dplyr::select(x,y,doy) %>%
+  dplyr::filter(doy > 73) %>%
+  dplyr::filter(doy < 297)
+
+max_reduction_doy_sgs <- rasterFromXYZ(max_reduction_doy_sgs)
+crs(max_reduction_doy_sgs) <- "+proj=longlat +datum=WGS84"
+
+#import and get total for nmp
+max_reduction_doy_nmp <- max_total_reduction_nmp_df %>%
+  dplyr::filter(type == 'max') %>%
+  select(x,y,doy) %>%
+  dplyr::filter(doy > 73) %>%
+  dplyr::filter(doy < 297)
+
+max_reduction_doy_nmp <- rasterFromXYZ(max_reduction_doy_nmp)
+crs(max_reduction_doy_nmp) <- "+proj=longlat +datum=WGS84"
+
+#combine
+max_reduction_doy <- merge(max_reduction_doy_nmp,max_reduction_doy_sgs,tolerance = 0.20)
+
+max_reduction_doy <-projectRaster(max_reduction_doy, crs='+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96
++        +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs')
+max_reduction_doy <- data.frame(rasterToPoints(max_reduction_doy))
+
+max_reduction_doy_map <-
+  ggplot() +
+  geom_polygon(data=states_all_sites_tidy, mapping=aes(x = long, y = lat,group=group),
+               color = "black", size = 0.1,fill=NA) +
+  geom_raster(data=max_reduction_doy, mapping=aes(x = x, y = y, fill = layer)) + 
+  coord_equal() +
+  scale_fill_scico('Day of peak reduction\nin carbon uptake',
+                   palette = 'batlow',direction = 1) +
+  xlab('') +
+  ylab('') +
+  scale_x_continuous(expand=c(0,0)) +
+  scale_y_continuous(expand=c(0,0)) +
+  coord_fixed(xlim=c(-1500000,0), ylim=c(9e+05,3100000)) + #crop 
+  theme(
+    axis.text.x = element_blank(), #angle=25,hjust=1),
+    axis.text.y = element_blank(),
+    axis.title.x = element_text(color='black',size=10),
+    axis.title.y = element_text(color='black',size=10),
+    axis.ticks = element_blank(),
+    legend.key = element_blank(),
+    legend.position = 'top',
+    strip.background =element_rect(fill="white"),
+    strip.text = element_text(size=10),
+    panel.background = element_rect(fill=NA),
+    panel.border = element_blank(), #make the borders clear in prep for just have two axes
+    axis.line.x = element_blank(),
+    axis.line.y = element_blank())
+
+
+#now do PDFs 
+
+max_reduction_doy_nmp <- data.frame(rasterToPoints(max_reduction_doy_nmp))
+max_reduction_doy_nmp$ecoregion <- 'Northern mixed prairies'
+
+max_reduction_doy_sgs <- data.frame(rasterToPoints(max_reduction_doy_sgs))
+max_reduction_doy_sgs$ecoregion <- 'Shortgrass steppe'
+
+max_reduction_doy_rbind <- rbind(max_reduction_doy_nmp,max_reduction_doy_sgs)
+
+#peak reduction day of year PDF
+max_reduction_doy_pdf <- ggplot(max_reduction_doy_rbind, aes(x = doy, fill = ecoregion)) +
+  scale_y_continuous(expand = c(0,0)) +
+  #scale_y_continuous(expand = c(0, 0), limits = c(0, 1.02)) +
+  geom_density(color = 'black', alpha = 0.5, aes(y = ..scaled..)) +
+  scale_fill_manual(values = c(
+    'Northern mixed prairies' = 'steelblue2',
+    'Shortgrass steppe' = 'green4'
+  )) +
+  xlab("Day of peak reduction") +
+  ylab('Probability density') +
+  theme(
+    axis.text.x = element_text(color = 'black', size = 10),
+    axis.text.y = element_text(color = 'black', size = 10),
+    axis.title = element_text(color = 'black', size = 10),
+    axis.ticks = element_line(color = 'black'),
+    legend.key = element_blank(),
+    legend.title = element_blank(),
+    legend.text = element_text(size = 7),
+    legend.position = 'top',
+    strip.background = element_rect(fill = "white"),
+    strip.text = element_text(size = 10),
+    panel.background = element_rect(fill = NA),
+    panel.border = element_blank(),
+    axis.line.x = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black"))
+
+
+#make and save the inset plot
+library(grid)
+vp <- viewport(width = 0.44, height = 0.39, x = 0.23,y=0.27)
+
+#executing the inset, you create a function the utlizes all the previous code
+full <- function() {
+  print(max_reduction_doy_map)
+  print(max_reduction_doy_pdf , vp = vp)
+}
+
+png(height = 1700,width=2000,res=300,'Figures/day_of_max_reduction.png')
+
+full()
+
+dev.off()
+
+#cleanup
+rm(max_reduction_doy,max_reduction_doy_map,max_reduction_doy_nmp,
+   max_reduction_doy_pdf,max_reduction_doy_rbind,max_reduction_doy_sgs,
+   max_total_reduction_nmp_df,max_total_reduction_sgs_df)
+
 #-------------------------------------------------------------------------------
