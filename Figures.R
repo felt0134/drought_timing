@@ -658,7 +658,7 @@ dev.off()
   abline(h=0,col='black',lty='dashed')
   mtext('Northern mixed prairies',side=3,line=0.5,cex=1.5)
   mtext('Day of year',side=1,line=4.5,cex=2.5)
-  mtext(expression("Drought impact to carbon uptake "(g~C~m^-2~'16 days')),side=2,line=4,adj = -0.1, cex=2.25)
+  mtext(expression("Drought impact to carbon uptake "(g~C~m^-2~'16 days'^-1)),side=2,line=4,adj = -0.05, cex=2.25)
   mtext('b',side=3,line=0.5,cex=2,adj=0.0)
   lines(abs_change~doy,data=growth_drynamics_absolute_nmp,type='l',col='white',lwd=4)
   
@@ -1194,7 +1194,7 @@ rm(max_total_reduction_nmp_df,max_total_reduction_sgs_df,
 
 
 #-------------------------------------------------------------------------------
-# peak reduction in carbon uptake (absolute)  ------
+# peak reduction in carbon uptake (absolute and relative)  ------
 
 
 #import:
@@ -1241,7 +1241,7 @@ peak_abs_reduction_map <-
   geom_raster(data = peak_abs_reduction, mapping=aes(x = x, y = y, fill = layer)) + 
   coord_equal() +
   ggtitle('Peak absolute reduction in carbon uptake') +
-  scale_fill_scico(bquote(' '*'g C'~ m^-2~'16 days'*''),palette = 'batlow',direction = 1) +
+  scale_fill_scico(bquote(' '*'g C'~ m^-2~'16 days'^-1*''),palette = 'batlow',direction = 1) +
   xlab('') +
   ylab('') +
   scale_x_continuous(expand=c(0,0)) +
@@ -1281,7 +1281,7 @@ peak_abs_reduction_pdf <- ggplot(peak_abs_reduction_rbind, aes(x = reduction, fi
     'Northern mixed prairies' = 'steelblue2',
     'Shortgrass steppe' = 'green4'
   )) +
-  xlab (bquote('Peak reduction ('*'g C'~ m^-2~'16 days'*')')) +
+  xlab (bquote('Peak reduction ('*'g C'~ m^-2~'16 days'^-1*')')) +
   ylab('Probability density') +
   theme(
     axis.text.x = element_text(color = 'black', size = 10),
