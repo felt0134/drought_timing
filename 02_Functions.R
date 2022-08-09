@@ -406,8 +406,6 @@ day_25_gpp_drought <- function(i) {
   growth_id <- growth_id %>%
     arrange(doy)
   
-  #growth_id <- aggregate(gpp ~ doy, median, data = growth_id)
-  
   #for that pixel, get cumulative GPP throughout the year
   growth_id<- data.frame(growth_id, gpp_2 = cumsum(growth_id$gpp))
   growth_id$gpp_3 <- 100*(growth_id$gpp_2 / max(growth_id$gpp_2))
@@ -767,7 +765,7 @@ gpp_spline_drought <- function(i) {
 }
 
 #-------------------------------------------------------------------------------
-# # IQR  ------
+# IQR  ------
 
 iqr_75 <- function(x){
 
