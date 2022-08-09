@@ -1,6 +1,6 @@
 
 
-#get % reduction in GPP throughout the growing season
+#get absolute and % reduction in GPP throughout the growing season
 
 # setup----
 plan(multisession, workers = 10)
