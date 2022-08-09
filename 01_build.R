@@ -8,8 +8,7 @@
 rm(list=ls())
 
 #load packages
-pkgs <- c("raster",'tidyverse','data.table',
-          'rstudioapi','readr')
+pkgs <- c("raster",'tidyverse','data.table','readr','rstudioapi')
 lapply(pkgs, library, character.only = TRUE) 
 
 # Set working directory to local directory
